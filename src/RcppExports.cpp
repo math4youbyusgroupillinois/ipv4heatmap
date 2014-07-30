@@ -50,3 +50,18 @@ BEGIN_RCPP
     return __sexp_result;
 END_RCPP
 }
+// boundingBoxFromCIDR
+List boundingBoxFromCIDR(CharacterVector cidr);
+RcppExport SEXP ipv4heatmap_boundingBoxFromCIDR(SEXP cidrSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< CharacterVector >::type cidr(cidrSEXP );
+        List __result = boundingBoxFromCIDR(cidr);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}

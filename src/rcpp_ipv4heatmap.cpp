@@ -1,31 +1,34 @@
 #include <Rcpp.h>
 #include <boost/asio/ip/address_v4.hpp>
 
+#include <err.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <string.h>
+#include <err.h>
+#include <assert.h>
+#include <math.h>
+
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+
 using namespace Rcpp;
 using namespace boost::asio::ip;
 
-#include "cidr.h"
-#include "bbox.h"
-#include "xy_from_ip.h"
+#include "ipv4-heatmap.h"
 
-extern void set_morton_mode();
-extern void set_crop(const char *);
-extern void set_bits_per_pixel(int);
-
-unsigned int addr_space_first_addr;
-unsigned int addr_space_last_addr;
-
-#ifndef MIN
-#define MIN(a,b) (a<b?a:b)
-#define MAX(a,b) (a>b?a:b)
-#endif
-
-int morton_flag = 0 ;
-
-//' Convert IP addresses in dotted-decimal notation to long integers
+//' Character (dotted-decimal) IPv4 Address Conversion to long integer
 //'
-//' @param ip input character vector
+//' Convert IP addresses in character (dotted-decimal) notation to long integers
+//'
+//' @param ip input character vector of IPv4 addresses (dotted-decimal)
 //' @return vector of equivalent long integer IP addresses
+//' @examples
+//' ip2long("24.0.5.11")
+//' ip2long(c("24.0.5.11", "211.3.77.96"))
 // [[Rcpp::export]]
 NumericVector ip2long (CharacterVector ip) {
 
@@ -41,10 +44,15 @@ NumericVector ip2long (CharacterVector ip) {
   return(ipInt);
 }
 
-//' Convert IP addresses in long integer format to dotted-decimal notation
+//' Intger IPv4 Address Conversion to Character
 //'
-//' @param ip input numeric (long int) vector
-//' @return vector of equivalent dotted-decimal IP addresses
+//' Converts IP addresses in long integer format to character (dotted-decimal) notation
+//'
+//' @param ip input numeric (long integer) vector
+//' @return vector of equivalent character (dotted-decimal) IP addresses
+//' @examples
+//' long2ip(402654475)
+//' long2ip(c(402654475, 3540208992))
 // [[Rcpp::export]]
 CharacterVector long2ip (NumericVector ip) {
 
@@ -60,36 +68,13 @@ CharacterVector long2ip (NumericVector ip) {
 
 }
 
-extern int hilbert_curve_order;
-extern int addr_space_bits_per_image;  /* /0 */
-extern int addr_space_bits_per_pixel;  /* /24 */
-extern unsigned int addr_space_first_addr;
-extern unsigned int addr_space_last_addr;
 
-extern void (*xy_from_s) (unsigned s, int n, unsigned *xp, unsigned *yp);
-
-
-/*
- * Translate an IPv4 address (stored as a 32bit int) into
- * output X,Y coordinates.  First check if its within our
- * crop bounds.  Return 0 if out of bounds.
- */
-unsigned int xy_from_ip(unsigned ip, unsigned *xp, unsigned *yp) {
-    unsigned int s;
-    if (ip < addr_space_first_addr)
-  return 0;
-    if (ip > addr_space_last_addr)
-	return 0;
-    s = (ip - addr_space_first_addr) >> addr_space_bits_per_pixel;
-    xy_from_s(s, hilbert_curve_order, xp, yp);
-    return 1;
-}
-
-int set_order() {
-    hilbert_curve_order = (addr_space_bits_per_image - addr_space_bits_per_pixel) / 2;
-    return hilbert_curve_order;
-}
-
+//' IPv4 Hilbert Curve Matrix
+//'
+//' Returns a 4096x4096 Hilbert curve matrix for an input vector of IP addresses. Generally not called directly (most of the time you'll want to use \code{ipv4heatmap}), but avilable in the event another method of visualization is necessary/desired.
+//'
+//' @param ip input character (dotted-deciman IPv4s) vector
+//' @return 4096x4096 matrix, with non-0 entries being the count of IP addresses in that netblock
 // [[Rcpp::export]]
 NumericMatrix ipv4matrix(CharacterVector ip) {
 
@@ -109,7 +94,6 @@ unsigned int x;
 
     if (0 != xy_from_ip((unsigned)ipl[i], &x, &y)) {
        ipmap(x, y) = ipmap(x, y) + 1;
-       // Rcpp::Rcout << i << " : " << x << " " << y << " " << ipmap(x, y) << std::endl;
     }
 
   }
@@ -118,11 +102,59 @@ unsigned int x;
 
 }
 
+//' Bounding box from CIDR blocks
+//'
+//' Returns a \code{list} of bounding boxes for a given CIDR within the Hilbert-curve plane
+//'
+//' @param cidr character vector of dotted-decimal/digit CIDRs
+//' @return list of bounding box extents for each CIDR - \code{cidr}, \code{xmin}, \code{ymin}, \code{xmax}, \code{ymax}
+//' @examples
+//' boundingBoxFromCIDR("30.0.0.0/8")
+// [[Rcpp::export]]
 List boundingBoxFromCIDR(CharacterVector cidr) {
 
     bbox bbox;
-    bbox = bbox_from_cidr(cidr[0]);
-    List out(10) ;
-    return(out) ;
+
+    int cidrCt = cidr.size() ;
+
+    List boxes(cidrCt) ;
+
+    for (int i=0; i<cidrCt; i++) {
+
+       bbox = bbox_from_cidr(cidr[i]);
+
+       boxes[i] = List::create(
+                          Rcpp::Named("cidr") = Rcpp::as<std::string>(cidr[i]),
+                          Rcpp::Named("xmin") = bbox.xmin,
+                          Rcpp::Named("ymin") = bbox.ymin,
+                          Rcpp::Named("xmax") = bbox.xmax,
+                          Rcpp::Named("ymax") = bbox.ymax
+                          );
+
+    }
+
+    return(boxes);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

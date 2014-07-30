@@ -11,5 +11,6 @@ Imports:
     Rcpp (>= 0.11.2),
     ggplot2,
     data.table,
-    grid
+    grid,
+    RColorBrewer
 LinkingTo: BH, Rcpp
