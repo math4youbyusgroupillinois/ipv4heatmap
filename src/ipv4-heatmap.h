@@ -109,6 +109,15 @@ R *= 255.0F;                                                        \
 G *= 255.0F;                                                        \
 B *= 255.0F;
 
+
+/*
+ * IPv4 Heatmap
+ * (C) 2007 The Measurement Factory, Inc
+ * Licensed under the GPL, version 2
+ * http://maps.measurement-factory.com/
+ */
+
+
 struct bb {
     int xmin, ymin, xmax, ymax;
 };

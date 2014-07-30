@@ -13,6 +13,7 @@
 #'
 #' Maintainer: Bob Rudis
 #' @keywords package
+#' @seealso \url{http://xkcd.com/195/}, \url{http://en.wikipedia.org/wiki/Hilbert_curve}
 #'
 #'
 NULL

@@ -1,12 +1,12 @@
 Package: ipv4heatmap
 Type: Package
-Title: What the package does (short line)
-Version: 1.0
+Title: IPv4 Hilbert curve heatmap generator
+Version: 0.1
 Date: 2014-07-29
-Author: Bob Rudis (bob.rudis@verizon.com)
-Maintainer: Who to complain to <yourfault@somewhere.net>
-Description: More about what it does (maybe more than one line)
-License: MIT
+Author: Bob Rudis <bob.rudis@verizon.com>
+Maintainer: Bob Rudis <bob.rudis@verizon.com>
+Description: This package generates IPv4 Hilbert space heatmaps. Given a vector of IPv4 addresses, the main function - ipv4heatmap - will return a ggplot object and a data frame (data.table) of the IPv4 addresses mapped to a 4096x4096 Hilbert plane. There are also functions to generate area bounding boxes from CIDR blocks which can then be overlaid onto the base Hilbert heatmap and for converting vectors of IPv4 addresses from long to character (and back).
+License: GPL-2
 Imports:
     Rcpp (>= 0.11.2),
     ggplot2,
