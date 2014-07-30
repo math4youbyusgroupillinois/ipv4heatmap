@@ -3,9 +3,9 @@ ipv4heatmap
 
 IPv4 Hilbert curve heatmap package for R
 
-Rcpp-backed package for making Hilbert IPv4 space heatmaps in R
+Rcpp-backed package for making Hilbert IPv4 space heatmaps in R. The C/C++ code is heavily based on the work of [The Measurement Factory](http://maps.measurement-factory.com/).
 
-(NOTE: you'll need to `brew install boost` or use some other package manager to install or manually install the [boost libraries())
+(NOTE: you'll need to `brew install boost` or use some other package manager to install or manually install the [boost library](http://www.boost.org/))
 
 ### sample usage
 
