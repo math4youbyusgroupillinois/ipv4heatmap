@@ -44,6 +44,7 @@ NumericVector ip2long (CharacterVector ip) {
   return(ipInt);
 }
 
+
 //' Intger IPv4 Address Conversion to Character
 //'
 //' Converts IP addresses in long integer format to character (dotted-decimal) notation
@@ -59,6 +60,7 @@ CharacterVector long2ip (NumericVector ip) {
   int ipCt = ip.size();
 
   CharacterVector ipStr(ipCt); // allocate new character vector
+
   // CONVERT ALL THE THINGS!
   for (int i=0; i<ipCt; i++) {
     ipStr[i] = address_v4(ip[i]).to_string();
@@ -78,22 +80,23 @@ CharacterVector long2ip (NumericVector ip) {
 // [[Rcpp::export]]
 NumericMatrix ipv4matrix(CharacterVector ip) {
 
-unsigned int x;
+  unsigned int x;
   unsigned int y;
+
+  // init hilbert stuff
 
   set_order() ;
 
-  NumericMatrix ipmap(4096, 4096);
 
+  // make a matrix to hold our hilbert space & init to 0
+  NumericMatrix ipmap(4096, 4096);
   std::fill(ipmap.begin(), ipmap.end(), 0);
 
-  NumericVector ipl = ip2long(ip) ;
-
-  int ipCt = ipl.size() ;
+  int ipCt = ip.size() ;
   for (int i=0; i<ipCt; i++) {
 
-    if (0 != xy_from_ip((unsigned)ipl[i], &x, &y)) {
-       ipmap(x, y) = ipmap(x, y) + 1;
+    if (0 != xy_from_ip(address_v4::from_string(ip[i]).to_ulong(), &x, &y)) {
+      ipmap(x, y) = ipmap(x, y) + 1;
     }
 
   }
@@ -124,7 +127,7 @@ List boundingBoxFromCIDR(CharacterVector cidr) {
        bbox = bbox_from_cidr(cidr[i]);
 
        boxes[i] = List::create(
-                          Rcpp::Named("cidr") = Rcpp::as<std::string>(cidr[i]),
+                          Rcpp::Named("cidr") = Rcpp::as<Rcpp::String>(cidr[i]),
                           Rcpp::Named("xmin") = bbox.xmin,
                           Rcpp::Named("ymin") = bbox.ymin,
                           Rcpp::Named("xmax") = bbox.xmax,
