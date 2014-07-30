@@ -34,6 +34,11 @@ Source: CRAN
 Version: 0.6.4
 Hash: e4bf0e79b15a352510aff0de905d31e2
 
+Package: formatR
+Source: CRAN
+Version: 0.10
+Hash: 20331f0a1a9c5f31541b34ecd9aed520
+
 Package: ggplot2
 Source: CRAN
 Version: 1.0.0
@@ -91,6 +96,12 @@ Package: Rcpp
 Source: CRAN
 Version: 0.11.2
 Hash: ef2b1a5e45d1461bd720e4ebbe48e601
+
+Package: Rd2roxygen
+Source: CRAN
+Version: 1.4
+Hash: bf2d86d185b0bddc186a6f2bff6c9f00
+Requires: formatR, roxygen2
 
 Package: reshape2
 Source: CRAN

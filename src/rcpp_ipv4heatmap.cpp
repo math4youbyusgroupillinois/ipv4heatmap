@@ -12,9 +12,13 @@ extern void set_morton_mode();
 extern void set_crop(const char *);
 extern void set_bits_per_pixel(int);
 
-extern unsigned int addr_space_first_addr;
-extern unsigned int addr_space_last_addr;
+unsigned int addr_space_first_addr;
+unsigned int addr_space_last_addr;
 
+#ifndef MIN
+#define MIN(a,b) (a<b?a:b)
+#define MAX(a,b) (a>b?a:b)
+#endif
 
 int morton_flag = 0 ;
 
@@ -114,5 +118,11 @@ unsigned int x;
 
 }
 
+List boundingBoxFromCIDR(CharacterVector cidr) {
 
+    bbox bbox;
+    bbox = bbox_from_cidr(cidr[0]);
+    List out(10) ;
+    return(out) ;
+}
 

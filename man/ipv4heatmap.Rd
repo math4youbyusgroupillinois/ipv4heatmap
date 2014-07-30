@@ -9,7 +9,7 @@ ipv4heatmap(ips)
 \item{ips}{character vector of ip addresses}
 }
 \value{
-ggplot2 object which can be ggsave'd or manipulated further
+list containing a ggplot2 object and the point data which can be ggsave'd or manipulated further
 }
 \description{
 Return a ggplot2 object of a hilbert-space heatmap for a set of ip addys
