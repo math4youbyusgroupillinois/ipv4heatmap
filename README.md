@@ -5,9 +5,14 @@ IPv4 Hilbert curve heatmap package for R
 
 Rcpp-backed package for making Hilbert IPv4 space heatmaps in R. The C/C++ code is heavily based on the work of [The Measurement Factory](http://maps.measurement-factory.com/).
 
-(NOTE: you'll need to `brew install boost` or use some other package manager to install or manually install the [boost library](http://www.boost.org/))
+(NOTE: you'll need to `brew install boost`, use some other package manager, or manually install the [boost library](http://www.boost.org/))
 
-### sample usage
+### Installation
+
+    if (!require("devtools")) install.packages("devtools")
+    devtools::install_github("vz-risk/ipv4heatmap")
+
+### Sample Usage
 
     library(ipv4heatmap)
     library(data.table)
@@ -16,13 +21,14 @@ Rcpp-backed package for making Hilbert IPv4 space heatmaps in R. The C/C++ code 
     # read in a list of IPs (you'll have to find one on your own :-)
     # using fread() and data.table since this particular database has 
     # a ton of them.
+    
     dat <- fread("2014-03-01.csv")
     setkey(dat, ipaddr)
 
     # build the heatmap
     hm <- ipv4heatmap(dat$ipaddr)
 
-    # plot the heatmap  (not shown)
+    # plot the heatmap (not shown)
     hm$gg
 
     # read in a list of CIDRs that are in China because, well, CHINA!
