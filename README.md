@@ -22,14 +22,13 @@ Rcpp-backed package for making Hilbert IPv4 space heatmaps in R. The C/C++ code 
     # extract only the C2 IP addresses from them
     ips <- dat[ttp_category=="c2",]$observable_value
 
-    # build the heatmap (not shown)
+    # build the heatmap
     hm <- ipv4heatmap(ips)
 
-    # plot the heatmap
+    # plot the heatmap  (not shown)
     hm$gg
 
-
-    # read in a list of CIDRs that are in China
+    # read in a list of CIDRs that are in China because, well, CHINA!
     china <- read.table("http://dds.ec/data/chinacidr.txt", header=FALSE)
 
     # generate the bounding boxes for them
