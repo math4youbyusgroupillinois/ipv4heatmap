@@ -46,7 +46,7 @@ ipv4heatmap <- function(ips, colors=NA, legend=FALSE) {
 
   suppressMessages({
 
-    gg <- gg + geom_point(data=dt, aes(x=row, y=col, color=color, alpha=color), size=1)
+    gg <- gg + geom_point(data=dt, aes(x=row, y=col, color=color), size=1)
     gg <- gg + xlim(0, 4095) + ylim(0, 4095)
     gg <- gg + labs(x="", y="", title="")
     gg <- gg + scale_color_manual(values=heatcols)
