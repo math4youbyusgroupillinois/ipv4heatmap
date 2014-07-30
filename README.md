@@ -13,17 +13,14 @@ Rcpp-backed package for making Hilbert IPv4 space heatmaps in R. The C/C++ code 
     library(data.table)
     require(ggplot2)
 
-    # read in a list of IOC's (you'll have to find one on your own :-)
+    # read in a list of IPs (you'll have to find one on your own :-)
     # using fread() and data.table since this particular database has 
     # a ton of them.
     dat <- fread("2014-03-01.csv")
-    setkey(dat, observable_value, ttp_category)
-
-    # extract only the C2 IP addresses from them
-    ips <- dat[ttp_category=="c2",]$observable_value
+    setkey(dat, ipaddr)
 
     # build the heatmap
-    hm <- ipv4heatmap(ips)
+    hm <- ipv4heatmap(dat$ipaddr)
 
     # plot the heatmap  (not shown)
     hm$gg
@@ -34,7 +31,7 @@ Rcpp-backed package for making Hilbert IPv4 space heatmaps in R. The C/C++ code 
     # generate the bounding boxes for them
     boxes <- ldply(boundingBoxFromCIDR(china$V1), data.frame)
 
-    # overlay the bounding boxes for China onto the C2 IOCs
+    # overlay the bounding boxes for China onto the IPv4 addresses we read in and Hilbertized
     hm$gg + geom_rect(data=boxes, aes(xmin=xmin, ymin=ymin, xmax=xmax, ymax=ymax), fill="white", alpha=0.1)
     
 ![img](https://farm3.staticflickr.com/2895/14600640420_463624bfc3_o.png)
