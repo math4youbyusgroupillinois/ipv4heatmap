@@ -6,6 +6,8 @@
 #'
 #' @param ips character vector of ip addresses
 #' @param colors character vector (5 elements) of colors to be used in the plot. Each color maps to the number of IP addresses in the netblock (~log scale). By default, it will use ColorBrewer "PuOr" range
+#' @param cbpal named RColorBrewer palette to use (using \code{colors} overrides any value used here)
+#' @param alpha scale pixel alpha along with color
 #' @param legend if you want the legend, then set this to TRUE.
 #' @return list containing a ggplot2 object (\code{gg}) and the x,y point data (\code{dt} - which is a \code{data.table}) which can be ggsave'd or manipulated further
 #' @examples
@@ -19,7 +21,7 @@
 #' str(hm$dt)
 #' @export
 
-ipv4heatmap <- function(ips, colors=NA, legend=FALSE) {
+ipv4heatmap <- function(ips, colors=NA, cb.pal="PuOr", alpha=FALSE, legend=FALSE) {
 
   require(data.table)
   require(ggplot2)
@@ -37,19 +39,24 @@ ipv4heatmap <- function(ips, colors=NA, legend=FALSE) {
                   labels=c("1-5", "6-15", "16-40", "41-100", "101-255"))
 
   if (anyNA(colors)) {
-    heatcols <- brewer.pal(5, "PuOr")
+    hilbcols <- brewer.pal(5, cb.pal)
   } else {
-    heatcols <- colors
+    hilbcols <- colors
   }
 
   gg <- ggplot()
 
   suppressMessages({
 
-    gg <- gg + geom_point(data=dt, aes(x=row, y=col, color=color), size=1)
+    if (alpha) {
+      gg <- gg + geom_point(data=dt, aes(x=row, y=col, color=color, alpha=alpha), size=1)
+    } else {
+      gg <- gg + geom_point(data=dt, aes(x=row, y=col, color=color), size=1)
+    }
+
     gg <- gg + xlim(0, 4095) + ylim(0, 4095)
     gg <- gg + labs(x="", y="", title="")
-    gg <- gg + scale_color_manual(values=heatcols)
+    gg <- gg + scale_color_manual(values=hilbcols)
     gg <- gg + scale_x_continuous(expand=c(0,0))
     gg <- gg + scale_y_reverse(expand=c(0,0))
     gg <- gg + coord_equal()
