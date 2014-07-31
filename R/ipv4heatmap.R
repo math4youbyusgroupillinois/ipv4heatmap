@@ -36,7 +36,7 @@ ipv4heatmap <- function(ips, colors=NA, legend=FALSE) {
                   include.lowest=TRUE,
                   labels=c("1-5", "6-15", "16-40", "41-100", "101-255"))
 
-  if (is.na(colors)) {
+  if (anyNA(colors)) {
     heatcols <- brewer.pal(5, "PuOr")
   } else {
     heatcols <- colors
