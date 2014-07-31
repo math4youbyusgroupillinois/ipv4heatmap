@@ -127,7 +127,7 @@ List boundingBoxFromCIDR(CharacterVector cidr) {
        bbox = bbox_from_cidr(cidr[i]);
 
        boxes[i] = List::create(
-                          Rcpp::Named("cidr") = Rcpp::as<Rcpp::String>(cidr[i]),
+                          Rcpp::Named("cidr") = Rcpp::as<std::string>(cidr[i]),
                           Rcpp::Named("xmin") = bbox.xmin,
                           Rcpp::Named("ymin") = bbox.ymin,
                           Rcpp::Named("xmax") = bbox.xmax,
