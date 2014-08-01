@@ -49,7 +49,7 @@ ipv4heatmap <- function(ips, colors=NA, cb.pal="PuOr", alpha=FALSE, legend=FALSE
   suppressMessages({
 
     if (alpha) {
-      gg <- gg + geom_point(data=dt, aes(x=row, y=col, color=color, alpha=alpha), size=1)
+      gg <- gg + geom_point(data=dt, aes(x=row, y=col, color=color, alpha=color), size=1)
     } else {
       gg <- gg + geom_point(data=dt, aes(x=row, y=col, color=color), size=1)
     }
