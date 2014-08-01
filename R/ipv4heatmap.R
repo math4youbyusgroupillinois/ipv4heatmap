@@ -76,7 +76,6 @@ ipv4heatmap <- function(ips, colors=NA, cb.pal="PuOr", alpha=FALSE, legend=FALSE
     gg <- gg + theme(plot.margin=unit(c(0,0,0,0), "null"))
     gg <- gg + theme(axis.ticks.length=unit(0, "null"))
     gg <- gg + theme(axis.ticks.margin=unit(0, "null"))
-    gg <- gg + theme(plot.margin=unit(c(0, 0, 0, 0), "lines"))
 
   })
 
